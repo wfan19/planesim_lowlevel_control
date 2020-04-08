@@ -10,7 +10,7 @@ planesim:
     type: effort_controllers/JointEffortController
     joint: left_aileron_joint
     pid: {p: 100.0, i: 0.1, d: 10.0}
-  # right_aileron_effort_controller:
-  #   type: effort_controllers/JointEffortController
-  #   joint: right_wheel_hinge
-  #   pid: {p: 100.0, i: 0.1, d: 10.0}
+  right_aileron_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: right_aileron_joint
+    pid: {p: 100.0, i: 0.1, d: 10.0}

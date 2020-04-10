@@ -25,6 +25,8 @@ private:
 
     void upateControllers();
 
+    ros::Publisher leftAileronEffortPub;
+
     ros::Time lastUpdateTime;
     double lastLeftAileronSP;
     double lastLeftAileronState;

@@ -10,19 +10,24 @@
 class FoilController{
 
 public:
-    FoilController();
+    FoilController(ros::NodeHandle nodeHandle);
     ~FoilController();
     
-    void init(int argc, char **argv);
+    void controlSurfaces();
 
-    PIDFF left_aileron_pidff;
+    void jointStateCallback(const sensor_msgs::JointState::ConstPtr &jointStatePtr);
+    void onLeftAileronSP(const std_msgs::Float64::ConstPtr &aileronSPPointer);
 
-    static void jointStateCallback(const sensor_msgs::JointState::ConstPtr &jointStatePtr);
+private:
+    ros::NodeHandle nodeHandle;
 
-    static ros::Publisher left_aileron_effort_pub;
-    static ros::Subscriber joint_state_sub;
-    // static ros::Publisher right_aileron_effort_pub;
+    PIDFF leftAileronPIDFF;
 
+    void upateControllers();
+
+    ros::Time lastUpdateTime;
+    double lastLeftAileronSP;
+    double lastLeftAileronState;
 };
 
 #endif

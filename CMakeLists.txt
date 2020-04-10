@@ -9,6 +9,7 @@ project(planesim_lowlevel_control)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
     roscpp
+    sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -117,6 +118,15 @@ include_directories(
 # include
 ${catkin_INCLUDE_DIRS}
 )
+
+add_library(PIDFF src/PIDFF.cpp)
+target_link_libraries(PIDFF ${catkin_LIBRARIES})
+
+add_executable(FoilController src/FoilController.cpp)
+add_dependencies(FoilController ${PROJECT_NAME}_gencfg)
+
+target_link_libraries(FoilController ${catkin_LIBRARIES})
+target_link_libraries(FoilController PIDFF)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

@@ -28,7 +28,7 @@ private:
     ros::Publisher leftAileronEffortPub;
 
     ros::Time lastUpdateTime;
-    double lastLeftAileronSP;
+    double lastLeftAileronSP{0};
     double lastLeftAileronState;
 };
 

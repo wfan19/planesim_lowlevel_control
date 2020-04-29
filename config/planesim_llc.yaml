@@ -16,7 +16,7 @@ planesim:
   #   pid: {p: 100.0, i: 0.1, d: 10.0}
 
 
-  propellor_effort_controller:
+  propeller_effort_controller:
       type: effort_controllers/JointEffortController
-      joint: propellor_joint
+      joint: propeller_joint
       pid: {p: 100.0, i: 0.1, d: 10.0}

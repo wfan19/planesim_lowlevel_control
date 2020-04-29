@@ -8,7 +8,7 @@
     type="spawner" respawn="false"
     output="screen" ns="/planesim"
     args="joint_state_controller
-      propellor_effort_controller"/>
+      propeller_effort_controller"/>
       <!-- right_aileron_effort_controller"
   /> -->
 

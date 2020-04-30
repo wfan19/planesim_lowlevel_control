@@ -3,15 +3,18 @@
 
 #include "ros/ros.h"
 #include "sensor_msgs/JointState.h"
+#include "std_msgs/Float64.h"
 
 #include <thread>
 #include <chrono>
 #include <array>
 #include <string>
 #include <map>
+#include <functional>
 
 #include "../include/planesim_lowlevel_control/PIDFF.hpp"
 
+using namespace std;
 class JointController {
 public:
     JointController(ros::NodeHandle nh);
@@ -24,16 +27,18 @@ public:
 private:
     ros::NodeHandle n;
     
-    const std::map<std::string, int> jointsMap = {
+    map<string, int> jointsMap = {
         {"propeller_joint", 0},
         {"left_aileron_joint", 1},
         {"right_aileron_joint", 2},
     };
 
-    std::array<ros::Time, 3> lastUpdateTimes;
-    std::array<float, 3> Targets;
-    std::array<PIDFF, 3> PIDs;
-    std::array<float, 3> CMDs;
+    static constexpr int jointCount = 3;
+
+    array<ros::Time, jointCount> lastUpdateTimes;
+    array<float, jointCount> targets;
+    array<PIDFF, jointCount> PIDs;
+    array<float, jointCount> CMDs;
 
     ros::Time propellerLastUpdateTime;
     float propellerTarget;
@@ -41,6 +46,7 @@ private:
     float propellerCMD;
 
     ros::Subscriber jointStateSub;
+    array<ros::Subscriber, jointCount> targetSubs;
 };
 
 #endif

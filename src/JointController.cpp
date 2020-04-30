@@ -8,6 +8,20 @@ JointController::JointController(ros::NodeHandle nh){
     propellerLastUpdateTime = ros::Time::now();
 
     jointStateSub = n.subscribe("/planesim/joint_state", 1000, &JointController::onJointState, this);
+
+    map<string, int>::iterator iterator;
+    int index = 0;
+    for (iterator = jointsMap.begin(); iterator != jointsMap.end(); iterator++){
+        
+        boost::function<void (const std_msgs::Float64&)> callback = 
+            [&](const std_msgs::Float64 &target){
+                targets[index] = target.data;
+                ROS_INFO("Received command %d for joint %s", target.data, iterator->second);        
+        };
+        
+        targetSubs[index] = n.subscribe<std_msgs::Float64>("/planesim/" + iterator->first, 1000, callback);
+
+    }
 }
 
 JointController::~JointController(){
@@ -22,14 +36,14 @@ void JointController::onJointState(const sensor_msgs::JointState::ConstPtr &join
 
     int counter = 0;
 
-    std::vector<double> position = jointStatePtr->position;
-    std::vector<double> velocity = jointStatePtr->velocity;
+    vector<double> position = jointStatePtr->position;
+    vector<double> velocity = jointStatePtr->velocity;
 
-    for (std::string name : jointStatePtr->name){
+    for (string name : jointStatePtr->name){
         int index = jointsMap.find(name)->second;
         float dt = ros::Time::now().toSec - lastUpdateTimes[index].toSec;
 
-        CMDs[index] = PIDs[index].update(Targets[index], index == 0 ? velocity[counter] : position[counter], dt);
+        CMDs[index] = PIDs[index].update(targets[index], index == 0 ? velocity[counter] : position[counter], dt);
 
         counter++;
         lastUpdateTimes[index] = ros::Time::now();

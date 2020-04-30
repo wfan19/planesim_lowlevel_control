@@ -8,9 +8,10 @@
     type="spawner" respawn="false"
     output="screen" ns="/planesim"
     args="joint_state_controller
-      propeller_effort_controller"/>
-      <!-- right_aileron_effort_controller"
-  /> -->
+          propeller_effort_controller
+          left_wing_effort_controller
+          right_wing_effort_controller"
+  />
 
 
   <!-- convert joint states to TF transforms for rviz, etc -->

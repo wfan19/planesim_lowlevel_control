@@ -17,6 +17,16 @@ planesim:
 
 
   propeller_effort_controller:
-      type: effort_controllers/JointEffortController
-      joint: propeller_joint
-      pid: {p: 100.0, i: 0.1, d: 10.0}
+    type: effort_controllers/JointEffortController
+    joint: propeller_joint
+    pid: {p: 100.0, i: 0.1, d: 10.0}
+
+  left_wing_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: left_wing_joint
+    pid: {p: 100.0, i: 0.1, d: 10.0}
+
+  right_wing_effort_controller:
+    type: effort_controllers/JointEffortController
+    joint: right_wing_joint
+    pid: {p: 100.0, i: 0.1, d: 10.0}

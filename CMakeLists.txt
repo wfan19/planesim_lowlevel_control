@@ -122,10 +122,12 @@ ${catkin_INCLUDE_DIRS}
 add_library(PIDFF src/PIDFF.cpp)
 target_link_libraries(PIDFF ${catkin_LIBRARIES})
 
-add_executable(JointController src/JointController.cpp)
-
-target_link_libraries(JointController ${catkin_LIBRARIES})
+add_library(JointController src/JointController.cpp)
 target_link_libraries(JointController PIDFF)
+
+add_executable(planesim_llc_main src/main.cpp)
+target_link_libraries(planesim_llc_main ${catkin_LIBRARIES})
+target_link_libraries(planesim_llc_main JointController)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

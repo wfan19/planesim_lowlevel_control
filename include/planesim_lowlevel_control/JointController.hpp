@@ -12,7 +12,7 @@
 #include <map>
 #include <functional>
 
-#include "../include/planesim_lowlevel_control/PIDFF.hpp"
+#include "PIDFF.hpp"
 
 using namespace std;
 class JointController {

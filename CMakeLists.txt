@@ -119,14 +119,13 @@ include_directories(
 ${catkin_INCLUDE_DIRS}
 )
 
-# add_library(PIDFF src/PIDFF.cpp)
-# target_link_libraries(PIDFF ${catkin_LIBRARIES})
+add_library(PIDFF src/PIDFF.cpp)
+target_link_libraries(PIDFF ${catkin_LIBRARIES})
 
-# add_executable(FoilController src/FoilController.cpp)
-# add_dependencies(FoilController ${PROJECT_NAME}_gencfg)
+add_executable(JointController src/JointController.cpp)
 
-# target_link_libraries(FoilController ${catkin_LIBRARIES})
-# target_link_libraries(FoilController PIDFF)
+target_link_libraries(JointController ${catkin_LIBRARIES})
+target_link_libraries(JointController PIDFF)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

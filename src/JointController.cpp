@@ -41,7 +41,7 @@ void JointController::onJointState(const sensor_msgs::JointState::ConstPtr &join
 
     for (string name : jointStatePtr->name){
         int index = jointsMap.find(name)->second;
-        float dt = ros::Time::now().toSec - lastUpdateTimes[index].toSec;
+        float dt = ros::Time::now().toSec() - lastUpdateTimes[index].toSec();
 
         CMDs[index] = PIDs[index].update(targets[index], index == 0 ? velocity[counter] : position[counter], dt);
 

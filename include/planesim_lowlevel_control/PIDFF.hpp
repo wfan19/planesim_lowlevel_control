@@ -19,6 +19,7 @@ public:
 
     PIDFF(double kp, double ki, double kd, double kff, double imin, double imax, double min, double max);
     PIDFF(PIDFF::PID_config pidConfig);
+    PIDFF();
     ~PIDFF();
 
     // Initialize the PIDFF with coefficients and limits

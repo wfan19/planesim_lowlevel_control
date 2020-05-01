@@ -18,6 +18,12 @@ void JointController::init(){
         // Initialize joint list
         joints[counter] = Joint(iterator->first, counter == 0 ? Type::velocity : Type::position);
 
+        // Remap joint name to joint topic name
+        // Joint name is the one used in JointState
+        // Joint topic name is the one that all the topics for a joint will be under
+        string jointName = iterator->first;
+        string jointTopicName = _namespace + "/" + jointName.substr(0, jointName.length - 6) + "_controller";
+
         // Subscriber callback
         boost::function<void (const std_msgs::Float64&)> callback = 
             [&, counter](const std_msgs::Float64 &target){
@@ -26,8 +32,6 @@ void JointController::init(){
         };
 
         // Register subscribers and callbacks
-        string jointName = iterator->first;
-        string jointTopicName = _namespace + "/" + jointName.substr(0, jointName.length - 6) + "_controller";
         ROS_INFO("Subscribing to topic %s", (jointTopicName + "/target").c_str());
         joints[counter].subscriber = n.subscribe<std_msgs::Float64>(jointTopicName + "/target", 1000, callback);
 

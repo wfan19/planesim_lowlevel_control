@@ -34,6 +34,9 @@ public:
         double target = 0;
         double current = 0;
 
+        Joint(){
+        }
+
         Joint(string _name, Type _type){
             name = _name;
             type = _type;

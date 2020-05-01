@@ -13,7 +13,7 @@ PIDFF::PIDFF(PIDFF::PID_config pidConfig)
 }
 
 PIDFF::PIDFF()
-    : kp(0), ki(0), kd(0), kff(0), imin(0), imax(0), min(0), max(0)
+    : kp(10), ki(1), kd(1), kff(0), imin(-1), imax(1), min(-1), max(1)
 {
     resetIntegrator();
 }

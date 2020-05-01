@@ -5,7 +5,8 @@ int main(int argc, char **argv){
     ros::init(argc, argv, "planesim_lowlevel_control");
     ros::NodeHandle n;
 
-    JointController jointController(n);
+    JointController jointController(n, "/planesim");
+    jointController.init();
 
     return 0;
 }

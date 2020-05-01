@@ -17,7 +17,33 @@
 using namespace std;
 class JointController {
 public:
-    JointController(ros::NodeHandle nh);
+    enum Type{
+        position,
+        velocity,
+    };
+    
+    struct Joint{
+        string name;
+        Type type;
+
+        ros::Subscriber subscriber;
+        ros::Publisher publisher;
+
+        PIDFF controller;
+        double lastUpdateTime;
+        double target = 0;
+        double current = 0;
+
+        Joint(string _name, Type _type){
+            name = _name;
+            type = _type;
+
+            controller = PIDFF();
+            lastUpdateTime = ros::Time::now().toSec();
+        }
+    };
+
+    JointController(ros::NodeHandle nh, string _namespace);
     ~JointController();
 
     void init();
@@ -26,27 +52,18 @@ public:
 
 private:
     ros::NodeHandle n;
+    string _namespace;
     
     map<string, int> jointsMap = {
         {"propeller_joint", 0},
-        {"left_aileron_joint", 1},
-        {"right_aileron_joint", 2},
+        {"left_wing_joint", 1},
+        {"right_wing_joint", 2},
     };
 
     static constexpr int jointCount = 3;
-
-    array<ros::Time, jointCount> lastUpdateTimes;
-    array<float, jointCount> targets;
-    array<PIDFF, jointCount> PIDs;
-    array<float, jointCount> CMDs;
-
-    ros::Time propellerLastUpdateTime;
-    float propellerTarget;
-    PIDFF propellerPID;
-    float propellerCMD;
+    Joint joints[jointCount];
 
     ros::Subscriber jointStateSub;
-    array<ros::Subscriber, jointCount> targetSubs;
 };
 
 #endif

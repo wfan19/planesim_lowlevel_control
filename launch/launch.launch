@@ -8,9 +8,9 @@
     type="spawner" respawn="false"
     output="screen" ns="/planesim"
     args="joint_state_controller
-          propeller_effort_controller
-          left_wing_effort_controller
-          right_wing_effort_controller"
+          propeller_joint_controller
+          left_wing_joint_controller
+          right_wing_joint_controller"
   />
 
 

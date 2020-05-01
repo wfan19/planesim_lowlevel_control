@@ -4,29 +4,40 @@ JointController::JointController(ros::NodeHandle nh, string _namespace)
     : _namespace(_namespace)
 {
     this->n = nh;
-
-    map<string, int>::iterator iterator;
-    int counter;
-    for (iterator = jointsMap.begin(); iterator != jointsMap.end(); ++iterator){
-        Joint joint(iterator->first, counter == 0 ? Type::velocity : Type::position);
-        joints[counter] = joint;
-
-        boost::function<void (const std_msgs::Float64&)> callback = 
-            [&](const std_msgs::Float64 &target){
-                joints[counter].target = target.data;
-                ROS_INFO("Received command %d for joint %s", target.data, iterator->first);        
-        };
-        string topicName = _namespace + "/" + iterator->first; 
-        ROS_INFO("Subscribing to topic %s", topicName.c_str());
-        joints[counter].subscriber = n.subscribe<std_msgs::Float64>(topicName, 1000, callback);
-    }
-
 }
 
 JointController::~JointController(){
 }
 
 void JointController::init(){
+
+    // We iterate through jointsMap so that joints[] will be in the order of jointsMap
+    map<string, int>::iterator iterator;
+    int counter;
+    for (iterator = jointsMap.begin(); iterator != jointsMap.end(); ++iterator){
+        // Initialize joint list
+        joints[counter] = Joint(iterator->first, counter == 0 ? Type::velocity : Type::position);
+
+        // Subscriber callback
+        boost::function<void (const std_msgs::Float64&)> callback = 
+            [&, counter](const std_msgs::Float64 &target){
+                joints[counter].target = target.data;
+                ROS_INFO("Received command %f for joint %s", target.data, joints[counter].name.c_str());        
+        };
+
+        // Register subscribers and callbacks
+        string jointName = iterator->first;
+        string jointTopicName = _namespace + "/" + jointName.substr(0, jointName.length - 6) + "_controller";
+        ROS_INFO("Subscribing to topic %s", (jointTopicName + "/target").c_str());
+        joints[counter].subscriber = n.subscribe<std_msgs::Float64>(jointTopicName + "/target", 1000, callback);
+
+        // Advertise publishers
+        string pubTopicName = jointTopicName + "/command";
+        ROS_INFO("Advertising to topic %s", (jointTopicName + "/target").c_str());
+        joints[counter].publisher = n.advertise<std_msgs::Float64>(jointTopicName + "/command", 100);
+
+        counter++;
+    }
 
     ROS_INFO("Spinning node!");
     ros::spin();
@@ -40,6 +51,6 @@ void JointController::onJointState(const sensor_msgs::JointState::ConstPtr &join
     vector<double> velocity = jointStatePtr->velocity;
 
     for (string name : jointStatePtr->name){
-
+        
     }
 }

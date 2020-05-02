@@ -43,6 +43,8 @@ void JointController::init(){
         index++;
     }
 
+    jointStateSub = n.subscribe(_namespace + "/joint_states", 1000, &JointController::onJointState, this);
+
     ROS_INFO("Spinning node!");
     ros::spin();
 }
@@ -63,6 +65,8 @@ void JointController::onJointState(const sensor_msgs::JointState::ConstPtr &join
         double currentTime = ros::Time::now().toSec();
         double dt = currentTime - joint->lastUpdateTime;
         double controlEffort = joint->controller.update(joint->target, joint->current, dt);
+
+        ROS_INFO("Control effort for joint %s: %f", joint->name.c_str(), controlEffort);
 
         std_msgs::Float64 controlMessage;
         controlMessage.data = controlEffort;
